@@ -1,4 +1,9 @@
 # vue-weather
+<p align="center">
+  <img src="https://github.com/mngduyphuong/Vue-weather-app/blob/master/src/assets/images/1.gif">
+    <br>
+  <img src="https://github.com/mngduyphuong/Vue-weather-app/blob/master/src/assets/images/2.gif">
+</p>
 
 ## Project setup
 ```
