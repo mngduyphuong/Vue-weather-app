@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="app">
+  <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''">
     <main>
       <br>
         <div class="date" v-show="!vi">Enter your city and press enter to check the weather</div>
