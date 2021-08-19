@@ -1,5 +1,8 @@
 # vue-weather
 <p align="center">
+  This is a basic VueJS app uses Axios to send HttpRequest to OpenWeatherMap API
+</p>
+<p align="center">
   <img src="https://github.com/mngduyphuong/Vue-weather-app/blob/master/src/assets/images/1.gif">
     <br>
   <img src="https://github.com/mngduyphuong/Vue-weather-app/blob/master/src/assets/images/2.gif">
