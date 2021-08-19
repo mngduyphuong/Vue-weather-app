@@ -1,13 +1,19 @@
 <template>
   <div id="app" :class="typeof weather.main != 'undefined' && weather.main.temp > 16 ? 'warm' : ''">
     <main>
+      <br>
+        <div class="date" v-show="!vi">Enter your city and press enter to check the weather</div>
+        <button v-on:click="vi = !vi" v-show="!vi">Change language VI/EN</button>
+        <div class="date" v-show="vi">Gõ thành phố và bấm enter để kiểm tra thời tiết</div>
+        <button v-on:click="vi = !vi" v-show="vi">Đổi ngôn ngữ VI/EN</button>
+        <br>
       <div class="search-box">
         <input 
           type="text" 
           class="search-bar" 
           placeholder="Search..."
-          v-model="query"
-          @keypress="fetchWeather"
+          v-model="city"
+          @keypress="getResult"
         />
       </div>
 
@@ -19,7 +25,7 @@
 
         <div class="weather-box">
           <div class="temp">{{ Math.round(weather.main.temp) }}°c</div>
-          <div class="weather">{{ weather.weather[0].main }}</div>
+          <div class="weather">{{ weather.weather[0].description }}</div>
         </div>
       </div>
     </main>
@@ -29,18 +35,26 @@
 <script>
 export default {
   name: 'app',
-  data () {
+  data: function() {
     return {
       api_key: '47b765b7a48c8a90323c890a4452aa44',
       url_base: 'https://api.openweathermap.org/data/2.5/',
-      query: '',
-      weather: {}
+      city: '',
+      weather: {},
+      lang:'',
+      vi:false
     }
   },
   methods: {
-    fetchWeather (e) {
+    getResult (e) {
       if (e.key == "Enter") {
-        fetch(`${this.url_base}weather?q=${this.query}&units=metric&APPID=${this.api_key}`)
+        if(this.vi){
+          this.lang = '&lang=vi'
+        }
+        else
+          this.lang = ''
+        //fetch(`${this.url_base}weather?q=${this.city}&appid=${this.api_key}&units=metric&lang=vi`)
+        fetch(`${this.url_base}weather?q=${this.city}&appid=${this.api_key}&units=metric${this.lang}`)
           .then(res => {
             return res.json();
           }).then(this.setResults);
@@ -51,15 +65,18 @@ export default {
     },
     dateBuilder () {
       let d = new Date();
-      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
+      var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      if(this.vi){
+      months = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"];
+      days = ["Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"];
+      }
       let day = days[d.getDay()];
       let date = d.getDate();
       let month = months[d.getMonth()];
       let year = d.getFullYear();
 
-      return `${day} ${date} ${month} ${year}`;
+      return `${day}, ${date} ${month} ${year}`;
     }
   }
 }
@@ -126,15 +143,16 @@ main {
 
 .location-box .location {
   color: #FFF;
-  font-size: 32px;
+  font-size: 50px;
   font-weight: 500;
   text-align: center;
   text-shadow: 1px 3px rgba(0, 0, 0, 0.25);
 }
 
-.location-box .date {
-  color: #FFF;
-  font-size: 20px;
+ .date {
+  color: lightgray;
+  padding-top: 10px;
+  font-size: 25px;
   font-weight: 300;
   font-style: italic;
   text-align: center;
@@ -160,10 +178,32 @@ main {
 }
 
 .weather-box .weather {
-  color: #FFF;
-  font-size: 48px;
+  color: lightgray;
+  text-transform: capitalize;
+  font-size: 40px;
   font-weight: 700;
   font-style: italic;
   text-shadow: 3px 6px rgba(0, 0, 0, 0.25);
+}
+button{
+  width: 60%;
+  padding:5px;
+  font-size: 3.5vw;
+  display: flex;
+  justify-content: center;
+  opacity: 0.6;
+  margin: 0 20% 0;
+}
+@media screen and (min-width: 780px) {
+  .search-box {
+    display: flex;
+    width: 50%;
+    margin: 0 25% 5%;
+  }
+  button{
+  width: 20%;
+  font-size: 20px;
+  margin: 0 40% 0;
+}
 }
 </style>
