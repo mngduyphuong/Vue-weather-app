@@ -47,9 +47,9 @@
 const axios = require("axios");
 export default {
   name: "app",
-  data: function () {
+  data: function() {
     return {
-      api_key: "47b765b7a48c8a90323c890a4452aa44",
+      api_key: process.env.VUE_APP_OPENWEATHERAPI,
       url_base: "https://api.openweathermap.org/data/2.5/weather",
       city: "",
       weather: {},
@@ -58,7 +58,6 @@ export default {
     };
   },
   methods: {
-    
     getResult(e) {
       if (e.key == "Enter") {
         if (this.vi) {
@@ -78,12 +77,11 @@ export default {
             console.log(response);
             this.setResults(response.data);
           })
-          .catch(function (error) {
+          .catch(function(error) {
             // handle error
             console.log(error);
-          })
-          ;
-      } 
+          });
+      }
     },
     setResults(results) {
       this.weather = results;
